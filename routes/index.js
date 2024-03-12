@@ -13,4 +13,8 @@ router.get('/login', function (req, res) {
     res.render('secret.njk', { title: 'Welcome' })
   })
 
+  router.get('/dbtest', function(req, res){
+    res.render('dbtest.njk', {title: 'test'} )
+  })
+
 module.exports = router
