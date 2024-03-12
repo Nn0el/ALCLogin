@@ -13,8 +13,14 @@ router.get('/login', function (req, res) {
     res.render('secret.njk', { title: 'Welcome' })
   })
 
-  router.get('/dbtest', function(req, res){
-    res.render('dbtest.njk', {title: 'test'} )
+  router.get('/dbtest', async function(req, res){
+    const pool = require('../db')
+    const [data] = await pool.promise().query('SELECT * FROM patch_login')
+res.json({data})
+  })
+
+  router.get('/users', function (req, res) {
+    res.render('users.njk', { title: 'Welcome' })
   })
 
 module.exports = router
