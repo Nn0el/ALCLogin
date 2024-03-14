@@ -17,20 +17,22 @@ router.get('/secret', function (req, res) {
   res.render('secret.njk', { title: 'Welcome' })
 })
 
-router.get('/hash', function (req, res) {
-  bcrypt.genSalt(saltRounds, function(err, salt) {
-    bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
-        // Store hash in your password DB.
-    });
-});
+router.get('/hash', async function (req, res) 
+{
 
-// Load hash from your password DB.
-bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
-  // result == true
+bcrypt.hash("test", 10, function(err, hash){
+  bcrypt.compare(myPlaintextPassword, hash, function(err, result) {
+    // result == true
 });
 bcrypt.compare(someOtherPlaintextPassword, hash, function(err, result) {
-  // result == false
+    // result == false
 });
+  console.log(hash);
+  return res.json(hash);
+});
+
+
+  res.render('hash.njk', { title: 'Welcome' })
 })
 
 router.get('/dbtest', async function (req, res) {
