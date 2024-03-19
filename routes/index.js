@@ -22,10 +22,20 @@ router.post('/login', async function (req, res) {
   console.log(result)
 
   bcrypt.compare(password, result[0].password, function (err, result) {
-    console.log(result)
-  })
-  res.send("tjena")
+    if (result == true) {
+      console.log(result, 'inloggad')
+      req.session.user = req.body.user
+      res.redirect('/secret') 
+      console.log(user)
+      // res.redirect
+    } else {
+      console.log(result, 'inte inloggad >:(')
+      res.redirect('/login')
+    }
+  });
+  console.log(result)
 })
+
 
 router.get('/secret', function (req, res) {
   res.render('secret.njk', { title: 'Welcome' })
@@ -34,9 +44,6 @@ router.get('/secret', function (req, res) {
 router.get('/hash', async function (req, res) {
 
   bcrypt.hash("roblox", 10, function (err, hash) {
-    bcrypt.compare(myPlaintextPassword, HASHFRÅNDB, function (err, result) {
-
-    });
 
     console.log(hash);
     return res.json(hash);

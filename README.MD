@@ -10,3 +10,5 @@ Sign up - registrera
 GET /
 GET /login
 POST /login 
+
+kasta folk ur secret om dom är inte user (session)
