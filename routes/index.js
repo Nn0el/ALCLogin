@@ -7,7 +7,10 @@ const myPlaintextPassword = 's0/\/\P4$$w0rD';
 const HASHFRÅNDB = 'BLABLA'
 
 router.get('/', function (req, res) {
-  res.render('index.njk', { title: 'Welcome' })
+  res.render('index.njk', {
+    title: 'Welcome',
+    username: req.session.username
+  })
 })
 
 router.get('/login', function (req, res) {
@@ -15,31 +18,46 @@ router.get('/login', function (req, res) {
 })
 
 router.post('/login', async function (req, res) {
-  const user = req.body.username
-  const password = req.body.password
-  console.log(user, password)
-  const [result] = await pool.promise().query('SELECT * FROM patch_login Where username = ?', [user])
-  console.log(result)
+  const userFromForm = req.body.username
+  const passwordFromForm = req.body.password
 
-  bcrypt.compare(password, result[0].password, function (err, result) {
+  const [user] = await pool.promise().query('SELECT * FROM patch_login Where username = ?', [userFromForm])
+  console.log(user)
+
+  bcrypt.compare(passwordFromForm, user[0].password, function (err, result) {
     if (result == true) {
       console.log(result, 'inloggad')
-      req.session.user = req.body.user
-      res.redirect('/secret') 
-      console.log(user)
+      req.session.loggedin = true
+      req.session.username = user[0].username
+
+      console.log(req.session.loggedin)
+      res.redirect('/secret')
       // res.redirect
     } else {
       console.log(result, 'inte inloggad >:(')
       res.redirect('/login')
     }
   });
-  console.log(result)
 })
+
+
 
 
 router.get('/secret', function (req, res) {
-  res.render('secret.njk', { title: 'Welcome' })
+
+  console.log(req.session.username)
+
+  if (!req.session.username) {
+    console.log("inte inloggad, stick")
+    return res.redirect('/login')
+  }
+
+
+
+  res.render('secret.njk', { username: req.session.username })
 })
+
+
 
 router.get('/hash', async function (req, res) {
 

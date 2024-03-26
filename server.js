@@ -18,9 +18,10 @@ nunjucks.configure('views', {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(express.static('public'))
+
 app.use(
   session({
-    secret: 'igdpoinfoierpoier',
+    secret: 'wekiugfkbnvway43',
     resave: false,
     saveUninitialized: true,
     cookie: { sameSite: true },
